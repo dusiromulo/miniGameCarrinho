@@ -3,6 +3,7 @@ STRIPES_MODULE = require 'stripes'
 OBSTACLES_MODULE = require 'obstacles'
 
 local obstacleChance = 50
+local obstacleLimitOnScreen = 3
 local w, h
 
 function PISTA_MODULE.newPista()
@@ -14,7 +15,7 @@ function PISTA_MODULE.newPista()
         
         update = function(pista, pontos)
           if (math.random(100) > (100-obstacleChance)) then
-            if (pista.obstaculos.numInstances() < 3) then
+            if (pista.obstaculos.numInstances() < 3*obstacleLimitOnScreen) then
               pista.obstaculos.newObstacle(math.random(3))
               pista.obstaculos.newObstacle(math.random(3)+3)
               pista.obstaculos.newObstacle(math.random(3)+6)

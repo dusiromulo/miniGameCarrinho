@@ -2,7 +2,7 @@ CAR_MODULE = require 'car'
 PISTA_MODULE = require 'pista'
 local w, h
 local cont = 0
-local updateStep = 20
+local updateStep = 10
 cars = {}
 pista = {}
 pontos = {0,0,0}
