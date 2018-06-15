@@ -1,19 +1,17 @@
 CARMODULE = {}
-carPositions = {}
 local w, h
 
-function CARMODULE.newCar(posIndex, posY, sprite)
+function CARMODULE.newCar(startPos, posY, sprite)
   
   w, h = love.graphics.getDimensions()
   local carWidth = 44
-
-  carPositions[1] = 0.17*w - carWidth
-  carPositions[2] = 0.17*w - carWidth + 0.33*w
-  carPositions[3] = 0.17*w - carWidth + 0.66*w
     
   obj = {
-      x = carPositions[posIndex],
+      x = startPos - carWidth/2,
       y = posY,
+      height = 89,
+      lane = 2,
+      carPositions = {startPos - 0.11*w - carWidth/2, startPos - carWidth/2, startPos + 0.11*w - carWidth/2},
       image = love.graphics.newImage(sprite),
       
       draw = function (car)
@@ -22,17 +20,21 @@ function CARMODULE.newCar(posIndex, posY, sprite)
       
       move = function(car, direction)
         if (direction == "left") then
-          if (car.x == carPositions[2]) then
-            car.x = carPositions[1]
-          elseif (car.x == carPositions[3]) then
-            car.x = carPositions[2]
+          if (car.x == car.carPositions[2]) then
+            car.x = car.carPositions[1]
+            car.lane = car.lane - 1
+          elseif (car.x == car.carPositions[3]) then
+            car.x = car.carPositions[2]
+            car.lane = car.lane - 1
           else
           end
         else
-          if (car.x == carPositions[1]) then
-            car.x = carPositions[2]
-          elseif (car.x == carPositions[2]) then
-            car.x = carPositions[3]
+          if (car.x == car.carPositions[1]) then
+            car.x = car.carPositions[2]
+            car.lane = car.lane + 1
+          elseif (car.x == car.carPositions[2]) then
+            car.x = car.carPositions[3]
+            car.lane = car.lane + 1
           else
           end
         end

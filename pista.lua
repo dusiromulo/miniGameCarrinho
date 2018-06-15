@@ -12,21 +12,23 @@ function PISTA_MODULE.newPista()
         stripes = STRIPES_MODULE.newStripe(),
         obstaculos = OBSTACLES_MODULE.newObstacles(),
         
-        update = function(pista)
+        update = function(pista, pontos)
           if (math.random(100) > (100-obstacleChance)) then
-            if (pista.obstaculos.numInstances() < 4) then
+            if (pista.obstaculos.numInstances() < 3) then
               pista.obstaculos.newObstacle(math.random(3))
+              pista.obstaculos.newObstacle(math.random(3)+3)
+              pista.obstaculos.newObstacle(math.random(3)+6)
             end
           end
           
           
           pista.stripes.update()
-          pista.obstaculos:update()
+          pista.obstaculos.update(pontos, cars)
         end,
         
         draw = function(pista)
           pista.stripes.draw()
-          pista.obstaculos:draw()
+          pista.obstaculos.draw()
         end,
 
         

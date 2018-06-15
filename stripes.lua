@@ -9,64 +9,67 @@ local function loadStripes(stripes)
   local darkImg = love.graphics.newImage("images/dark.png")
   local lightImg = love.graphics.newImage("images/light.png")
   
-  for i=1,20 do
-    stripes[#stripes+1] = {
-                              x = 0,
-                              y = i*h/20
-                          }
-    if (math.fmod(i, 2) == 0) then
-      stripes[#stripes].imagem = darkImg
-    else
-      stripes[#stripes].imagem = lightImg
-    end
+  for cont = 0, 2 do
     
-  end
-  --</Left Stripes>
-  
-  --<0.33 Stripes>
-  for i=1,20 do
-    stripes[#stripes+1] = {
-                              x = w*0.33 - stripeWidth,
-                              y = i*h/20
-                          }
-    if (math.fmod(i,2) == 0) then
-      stripes[#stripes].imagem = darkImg
-    else
-      stripes[#stripes].imagem = lightImg
+    for i=1,20 do
+      stripes[#stripes+1] = {
+                                x = cont*0.33*w + 0,
+                                y = i*h/20
+                            }
+      if (math.fmod(i, 2) == 0) then
+        stripes[#stripes].imagem = darkImg
+      else
+        stripes[#stripes].imagem = lightImg
+      end
+      
     end
+    --</Left Stripes>
     
-  end
-  --</0.33 Stripes>
-  
-  --<0.66 Stripes>
-  for i=1,20 do
-    stripes[#stripes+1] = {
-                              x = w*0.66 - stripeWidth,
-                              y = i*h/20
-                          }
-    if (math.fmod(i,2) == 0) then
-      stripes[#stripes].imagem = darkImg
-    else
-      stripes[#stripes].imagem = lightImg
+    --<0.33 Stripes>
+    for i=1,20 do
+      stripes[#stripes+1] = {
+                                x = cont*0.33*w + w*0.11 - stripeWidth,
+                                y = i*h/20
+                            }
+      if (math.fmod(i,2) == 0) then
+        stripes[#stripes].imagem = darkImg
+      else
+        stripes[#stripes].imagem = lightImg
+      end
+      
     end
+    --</0.33 Stripes>
     
-  end
-  --</0.66 Stripes>
-  
-  --<Right Stripes>
-  for i=1,20 do
-    stripes[#stripes+1] = {
-                              x = w-stripeWidth,
-                              y = i*h/20
-                          }
-    if (math.fmod(i,2) == 0) then
-      stripes[#stripes].imagem = darkImg
-    else
-      stripes[#stripes].imagem = lightImg
+    --<0.66 Stripes>
+    for i=1,20 do
+      stripes[#stripes+1] = {
+                                x = cont*0.33*w + w*0.22 - stripeWidth,
+                                y = i*h/20
+                            }
+      if (math.fmod(i,2) == 0) then
+        stripes[#stripes].imagem = darkImg
+      else
+        stripes[#stripes].imagem = lightImg
+      end
+      
     end
+    --</0.66 Stripes>
     
+    --<Right Stripes>
+    for i=1,20 do
+      stripes[#stripes+1] = {
+                                x = cont * 0.33 *w + w*0.33 - stripeWidth,
+                                y = i*h/20
+                            }
+      if (math.fmod(i,2) == 0) then
+        stripes[#stripes].imagem = darkImg
+      else
+        stripes[#stripes].imagem = lightImg
+      end
+      
+    end
+    --</Right Stripes>
   end
-  --</Right Stripes>
   
   stripes.update = function ()
       for i=1,#stripes do
