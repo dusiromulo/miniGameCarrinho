@@ -1,8 +1,8 @@
-car = {}
+CARMODULE = {}
 carPositions = {}
 local w, h
 
-function car.newCar(posIndex, posY, sprite)
+function CARMODULE.newCar(posIndex, posY, sprite)
   
   w, h = love.graphics.getDimensions()
   local carWidth = 44
@@ -47,4 +47,4 @@ function car.newCar(posIndex, posY, sprite)
   
 end
 
-return car
+return CARMODULE

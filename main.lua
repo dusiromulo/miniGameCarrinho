@@ -1,85 +1,15 @@
 CAR_MODULE = require 'car'
+PISTA_MODULE = require 'pista'
 local w, h
-local stripeWidth = 9
 local cont = 0
 local updateStep = 20
-stripes = {}
 cars = {}
+pista = {}
 
-local function loadStripes()
-  
-  local darkImg = love.graphics.newImage("images/dark.png")
-  local lightImg = love.graphics.newImage("images/light.png")
-  
-  for i=1,20 do
-    stripes[#stripes+1] = {
-                              x = 0,
-                              y = i*h/20
-                          }
-    if (math.fmod(i, 2) == 0) then
-      stripes[#stripes].imagem = darkImg
-    else
-      stripes[#stripes].imagem = lightImg
-    end
-    
-  end
-  --</Left Stripes>
-  
-  --<0.33 Stripes>
-  for i=1,20 do
-    stripes[#stripes+1] = {
-                              x = w*0.33 - stripeWidth,
-                              y = i*h/20
-                          }
-    if (math.fmod(i,2) == 0) then
-      stripes[#stripes].imagem = darkImg
-    else
-      stripes[#stripes].imagem = lightImg
-    end
-    
-  end
-  --</0.33 Stripes>
-  
-  --<0.66 Stripes>
-  for i=1,20 do
-    stripes[#stripes+1] = {
-                              x = w*0.66 - stripeWidth,
-                              y = i*h/20
-                          }
-    if (math.fmod(i,2) == 0) then
-      stripes[#stripes].imagem = darkImg
-    else
-      stripes[#stripes].imagem = lightImg
-    end
-    
-  end
-  --</0.66 Stripes>
-  
-  --<Right Stripes>
-  for i=1,20 do
-    stripes[#stripes+1] = {
-                              x = w-stripeWidth,
-                              y = i*h/20
-                          }
-    if (math.fmod(i,2) == 0) then
-      stripes[#stripes].imagem = darkImg
-    else
-      stripes[#stripes].imagem = lightImg
-    end
-    
-  end
-  --</Right Stripes>
-  
-  stripes.update = function ()
-      for i=1,#stripes do
-        stripes[i].y = stripes[i].y + h/40
-        if (stripes[i].y > h) then
-          stripes[i].y = -h/40
-        end
-      end
-    end
-  
-  
+local function loadPista()
+  print("load");
+  pista = PISTA_MODULE.newPista()
+  print("end load");
 end
 
 local function loadCars(numCars)
@@ -134,8 +64,8 @@ function love.load()
   love.graphics.setBackgroundColor(1,1,1)
   w, h = love.graphics.getDimensions()
   
-  loadStripes()
-  loadCars(2)
+  loadPista()
+  loadCars(3)
   
   --<Create Cars>
  
@@ -147,7 +77,7 @@ end
 
 function love.update()
   cont = cont + 1
-  stripes.update()
+  pista:update()
   
   if(cont > updateStep) then
     cont = 0   
@@ -160,9 +90,7 @@ end
 
 
 function love.draw()
-  for i=1,#stripes do
-      love.graphics.draw( stripes[i].imagem, stripes[i].x, stripes[i].y)
-  end
+  pista:draw()
   
   for i,v in pairs(cars) do
       cars[i]:draw()
