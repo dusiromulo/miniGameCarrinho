@@ -1,11 +1,12 @@
 CAR_MODULE = require 'car'
 PISTA_MODULE = require 'pista'
+CONTROLE_MODULE = require 'controles'
+
 local w, h
-local cont = 0
-local updateStep = 10
 cars = {}
 pista = {}
 pontos = {0,0,0}
+--controles = {}
 
 local function loadPista()
   print("load");
@@ -26,40 +27,10 @@ local function loadCars(numCars)
       cars[#cars+1] = CAR_MODULE.newCar(w*0.165 + 0.66*w,h*0.8, "images/car3.png")
     end
     
+    CONTROLE_MODULE.assign(i,cars[#cars])
+    
   end  
   
-end
-
-
-
-local function checkMsgs()
-  
-  if #cars>0  then
-    if (love.keyboard.isDown("a")) then
-      cars[1]:move("left")
-    elseif (love.keyboard.isDown("d")) then
-      cars[1]:move("right")
-    else
-    end
-  end
-
-  if #cars>1  then
-    if (love.keyboard.isDown("q")) then
-      cars[2]:move("left")
-    elseif (love.keyboard.isDown("e")) then
-      cars[2]:move("right")
-    else
-    end
-  end
-
-  if #cars>2  then
-    if (love.keyboard.isDown("z")) then
-      cars[3]:move("left")
-    elseif (love.keyboard.isDown("c")) then
-      cars[3]:move("right")
-    else
-    end
-  end
 end
 
 
@@ -80,16 +51,13 @@ end
 
 
 function love.update()
-  cont = cont + 1
   pista:update(pontos, cars)
   
-  if(cont > updateStep) then
-    cont = 0   
-    checkMsgs()
     for i,v in pairs(cars) do
       cars[i]:update()
     end
-  end
+  
+  CONTROLE_MODULE.update()
 end
 
 
