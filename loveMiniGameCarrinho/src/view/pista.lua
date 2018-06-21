@@ -1,10 +1,9 @@
 PISTA_MODULE = {}
-STRIPES_MODULE = require 'stripes'
-OBSTACLES_MODULE = require 'obstacles'
+STRIPES_MODULE = require 'src/view/stripes'
+OBSTACLES_MODULE = require 'src/view/obstacles'
 
 local obstacleChance = 50
 local obstacleLimitOnScreen = 3
-local w, h
 
 function PISTA_MODULE.newPista()
   math.randomseed(os.time())
@@ -21,18 +20,14 @@ function PISTA_MODULE.newPista()
               pista.obstaculos.newObstacle(math.random(3)+6)
             end
           end
-          
-          
+
           pista.stripes.update()
           pista.obstaculos.update(pontos, cars)
         end,
-        
         draw = function(pista)
           pista.stripes.draw()
           pista.obstaculos.draw()
         end,
-
-        
     }
     
   return pista

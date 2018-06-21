@@ -79,7 +79,7 @@ end
 
 local MQTT = {}
 
-MQTT.Utility = require("utility")
+MQTT.Utility = require("src/util/utility")
 
 MQTT.VERSION = 0x03
 
