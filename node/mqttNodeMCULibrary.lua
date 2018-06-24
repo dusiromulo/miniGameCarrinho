@@ -78,4 +78,19 @@ function MQTT.sendMessage(message, topic)
   mqttClient:publish(topic,message,0,0, function(client) end)
 end
 
+--[[
+    function to unsubscribe from previous topic
+    and subscribe for parameter topic
+]]
+function MQTT.subToNewTopic(topic)
+    mqttClient:unsubscribe(channel, function(conn)
+        print('succesfuly unsubscribed from '.. channel) 
+    end)
+    
+    channel = topic
+    mqttClient:subscribe(topic, 0, function(conn)
+        print('succesfuly subscribed to '.. topic) 
+    end)
+end
+
 return MQTT

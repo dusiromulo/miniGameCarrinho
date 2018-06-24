@@ -4,8 +4,8 @@ local function wifi_connected_callback(iptable)
 end
 
 wificonf = {
-  ssid = "",
-  pwd = "",
+  ssid = "Breno",
+  pwd = "M@gr042o",
   got_ip_cb = wifi_connected_callback,
   save = false,
 }

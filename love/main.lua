@@ -1,9 +1,10 @@
-CAR_MODULE = require 'src/view/car'
+CARRO_MODULE = require 'src/view/carro'
 PISTA_MODULE = require 'src/view/pista'
-CONTROLE_MODULE = require 'src/controller/controles'
+NOVO_JOGADOR_MODULE = require 'src/controller/novo_jogador'
 
 local w, h = 1280,720
 local total_nodes = 3
+local novo_jogador = nil
 cars = {}
 pista = {}
 pontos = {0,0,0}
@@ -12,36 +13,42 @@ local function loadPista()
 	pista = PISTA_MODULE.newPista()
 end
 
-local function loadCars()
+local function loadCarros()
 	for i = 1, total_nodes do
 		if (i == 1) then
-		  cars[#cars+1] = CAR_MODULE.newCar(w*0.165,h*0.8, "images/car1.png")
+		  cars[#cars+1] = CARRO_MODULE.cria(w*0.165, w*0.11, h*0.8, "images/car1.png")
 		elseif (i == 2) then
-		  cars[#cars+1] = CAR_MODULE.newCar(w*0.165 + 0.33*w,h*0.8, "images/car2.png")
+		  cars[#cars+1] = CARRO_MODULE.cria(w*0.165 + 0.33*w, w*0.11, h*0.8, "images/car2.png")
 		else
-		  cars[#cars+1] = CAR_MODULE.newCar(w*0.165 + 0.66*w,h*0.8, "images/car3.png")
+		  cars[#cars+1] = CARRO_MODULE.cria(w*0.165 + 0.66*w, w*0.11, h*0.8, "images/car3.png")
 		end
-
-		CONTROLE_MODULE.assign(i, cars[#cars])
 	end  
+end
+
+function novoPlayer(nome, posicao)
+	print("newConnection " .. nome .. " " .. posicao)
+end
+
+function appState()
+	return true
 end
 
 function love.load()
 	love.window.setMode(w, h)
-	love.graphics.setBackgroundColor(1,1,1)
+	love.graphics.setBackgroundColor(255, 255, 255)
 	w, h = love.graphics.getDimensions()
 	loadPista()
-	loadCars(3)
+	loadCarros()
+
+	novo_jogador = NOVO_JOGADOR_MODULE.cria(novoPlayer, appState)
 end
 
 function love.update()
 	pista:update(pontos, cars)
-
-	for i = 1, #cars do
+	novo_jogador:update()
+	--[[for i = 1, #cars do
 		cars[i]:update()
-	end
-
-	CONTROLE_MODULE.update()
+	end]]
 end
 
 
@@ -53,7 +60,7 @@ function love.draw()
 	love.graphics.print(pontosP1, w*0.165, h*0.1)
 	love.graphics.print(pontosP2, w*0.165 + w*0.33, h*0.1)
 	love.graphics.print(pontosP3, w*0.165 + w*0.66, h*0.1)
-	love.graphics.setColor(1,1,1)
+	love.graphics.setColor(255, 255, 255)
 	pista:draw()
 
 	for i,v in pairs(cars) do
