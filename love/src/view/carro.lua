@@ -58,7 +58,7 @@ function carro.cria(id, channel, startX, moveOffsetX, fixedY, imagem)
 	setmetatable(carro, mt)
 
 	local callbacks = createCallbackTable(carro)
-	carro.controle = controle.cria(id, channel, callbacks[1], callbacks[2], callbacks[3])
+	--carro.controle = controle.cria(id, channel, callbacks[1], callbacks[2], callbacks[3])
 	return carro
 end
 

@@ -1,104 +1,84 @@
-OBSTACLES_MODULE = {}
-obstaclePositions = {}
-
-function createObstacles(posX)
-	local w, h = love.graphics.getDimensions()
-	local obstacleWidth = 102
-
-	obstaclePositions[1] = w*0.055 - obstacleWidth/2
-	obstaclePositions[2] = w*0.055 - obstacleWidth/2 + 0.11*w
-	obstaclePositions[3] = w*0.055 - obstacleWidth/2 + 0.22*w
-	obstaclePositions[4] = w*0.055 - obstacleWidth/2 + 0.33*w
-	obstaclePositions[5] = w*0.055 - obstacleWidth/2 + 0.44*w
-	obstaclePositions[6] = w*0.055 - obstacleWidth/2 + 0.55*w
-	obstaclePositions[7] = w*0.055 - obstacleWidth/2 + 0.66*w
-	obstaclePositions[8] = w*0.055 - obstacleWidth/2 + 0.77*w
-	obstaclePositions[9] = w*0.055 - obstacleWidth/2 + 0.88*w
-  
-	obst = {
-		x = obstaclePositions[posX],
-		y = 0,
-		cont = 0,
-		speed = h/100,
-		destroy = false,
-		update = function (target, pontos, cars)
-			target.cont = 0
-			target.y = target.y + target.speed
-			if (target.y > h) then
-				pontos[target.player] = pontos[target.player] + 1
-				target.destroy = true
-			end
-			
-			if (target.y >= cars[target.player].y and target.y <= cars[target.player].y+cars[target.player].height) then
-				if (target.lane == cars[target.player].lane) then
-					target.destroy = true
-				end
-			end
-		end,
-		image = love.graphics.newImage("images/obstacle.png"),
-		draw = function (target)
-			love.graphics.draw( target.image, target.x, target.y)
+obstaculos = {
+	windowHeight = 0,
+	velocidade = 1,
+	velPx = 0,
+	obstaculos = {},
+	posicoes = {},
+	positionX = 0,
+	started = false,
+	offset = 0,
+	showingFinal = false,
+	totalObstaculos = 9,
+	offsetObstaculos = 300,
+	setObstaculos = function (obj, obstaculos)
+		obj.obstaculos = obstaculos
+	end,
+	start = function(obj)
+		obj.started = true
+	end,
+	update = function(obj, dt)
+		if obj.started then
+			obj.offset = obj.offset + dt*obj.velocidade*obj.velPx
 		end
-	}
-	
-	if (posX<4) then
-		obst.player = 1
-	elseif (posX<7) then
-		obst.player = 2
-	else
-		obst.player = 3
-	end
-	
-	if (posX<4) then
-		obst.lane = posX
-	elseif (posX<7) then
-		obst.lane = posX-3
-	else
-		obst.lane = posX-6
-	end
-	
-	return obst
-end
+	end,
+	draw = function(obj)
+		if obj.started then
+			for i = 1, #(obj.obstaculos) do
+				local currY = obj.obstaculos[i].y + obj.offset
+				if obj.showingFinal and i < 4 then
+					currY = currY - #(obj.obstaculos)*obstaculos.offsetObstaculos
+				end
 
+				love.graphics.setColor(255, 255, 255)
+				love.graphics.draw(obj.img, obj.positionX + obj.positions[obj.obstaculos[i].x], 
+					currY)
 
-function OBSTACLES_MODULE.newObstacles()
-	obstacles = {
-		draw = function()
-			for i = 1,#obstacles do
-				obstacles[i]:draw()
-			end
-		end,
-
-		update = function(pontos)
-			if (#obstacles < 1) then
-				return 
-			end
-			
-			continue = true
-			
-			for i = 1,#obstacles do
-				if (continue == true) then
-					obstacles[i]:update(pontos, cars)
-					if (obstacles[i].destroy == true) then
-						table.remove(obstacles,i)
-						continue = false
+				if i == #(obj.obstaculos) then
+					if not obj.showingFinal then
+						if currY > 0 then
+							obj.showingFinal = true
+						end
+					else 
+						if currY > obj.windowHeight then
+							obj.showingFinal = false
+							obj.offset = obj.offset - #(obj.obstaculos)*obstaculos.offsetObstaculos
+						end
 					end
 				end
 			end
-			
-		end,
-
-		numInstances = function()
-			return #obstacles
-		end,
-
-		newObstacle = function (x)
-			obstacles[#obstacles+1] = createObstacles(x)
 		end
-	}
-	
-	return obstacles
+	end,
+}
+
+local mt = {
+	__index = obstaculos,
+}
+
+function obstaculos.criaLista()
+	math.randomseed(os.time())
+	local positions = {}
+	local totalPositions = obstaculos.totalObstaculos
+	for i = 1, totalPositions do
+		positions[i] = {x=math.random(1, 3), y=i*obstaculos.offsetObstaculos*-1}
+	end
+	return positions
 end
 
+function obstaculos.cria(windowHeight, midX, offsetX, positionX, velPx)
+	local obstacleImg = love.graphics.newImage("images/obstacle.png")
+	local obstacleWidth = obstacleImg:getWidth()
 
-return OBSTACLES_MODULE
+	obstaculos = {
+		windowHeight = windowHeight,
+		velPx = velPx,
+		positionX = positionX,
+		positions = {midX - offsetX - obstacleWidth/2, midX - obstacleWidth/2, midX + offsetX - obstacleWidth/2},
+		img = obstacleImg
+	}
+	setmetatable(obstaculos, mt)
+
+
+	return obstaculos
+end
+
+return obstaculos

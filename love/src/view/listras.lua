@@ -1,8 +1,8 @@
 listras = {
 	velocidade = 1,
-	velPx = 150,
+	velPx = 0,
 	x = 0,
-	totalHeight = 0,
+	windowHeight = 0,
 	currOffset = 0,
 	width = 10,
 	height = 30,
@@ -14,7 +14,7 @@ listras = {
 	end,
 	draw = function (obj)
 		love.graphics.setColor(0, 0, 0)
-		for i = -2, math.floor(obj.totalHeight/obj.height) do -- para desenhar fora da tela
+		for i = -2, math.floor(obj.windowHeight/obj.height) do -- para desenhar fora da tela
 			if i % 2 == 0 then
 				love.graphics.rectangle("fill", obj.x, obj.currOffset + i*obj.height, obj.width, obj.height)
 			end
@@ -26,18 +26,20 @@ local mt = {
 	__index = listras,
 }
 
-function listras.cria(posX, totalHeight, width, height)
+function listras.cria(initialVelocity, posX, windowHeight, width, height)
 	if width ~= nil then
 		listr = {
+			velPx = initialVelocity,
 			x = posX,
-			totalHeight = totalHeight,
+			windowHeight = windowHeight,
 			width = width,
 			height = height
 		}
 	else
 		listr = {
+			velPx = initialVelocity,
 			x = posX,
-			totalHeight = totalHeight
+			windowHeight = windowHeight
 		}
 	end
 
