@@ -6,6 +6,7 @@ local carro = {
 	carPositions = {0, 0, 0},
 	imagem = nil,
 	draw = function (obj)
+		love.graphics.setColor(255, 255, 255)
 		love.graphics.draw(obj.imagem, obj.x, obj.y)
 	end,
 	moveEsq = function(obj)

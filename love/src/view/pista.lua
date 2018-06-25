@@ -1,38 +1,49 @@
-PISTA_MODULE = {}
-STRIPES_MODULE = require 'src/view/stripes'
-OBSTACLES_MODULE = require 'src/view/obstacles'
+listras = require 'src/view/listras'
+carro = require 'src/view/carro'
 
-local obstacleChance = 50
-local obstacleLimitOnScreen = 3
+pista = {
+	velocidade = 1,
+	x = 0,
+	height = 0,
+	width = 0,
+	listras = {},
+	carro = nil,
+	criaCarro = function (obj, carPosition, carMoveOffsetX, carImg)
+		obj.carro = carro.cria(carPosition, carMoveOffsetX, obj.height*0.8, carImg)
+	end,
+	update = function (obj, dt)
+		for i = 1, #(obj.listras) do
+			obj.listras[i]:update(dt)
+		end
+	end,
+	draw = function (obj)
+		if obj.carro ~= nil then
+			obj.carro:draw()
+		end
 
-function PISTA_MODULE.newPista()
-	math.randomseed(os.time())
-	
-	pista = {
-		stripes = STRIPES_MODULE.newStripe(),
-		obstaculos = OBSTACLES_MODULE.newObstacles(),
-		
-		update = function(pista, pontos)
-			if (math.random(100) > (100-obstacleChance)) then
-				if (pista.obstaculos.numInstances() < 3*obstacleLimitOnScreen) then
-					pista.obstaculos.newObstacle(math.random(3))
-					pista.obstaculos.newObstacle(math.random(3)+3)
-					pista.obstaculos.newObstacle(math.random(3)+6)
-				end
-			end
+		for i = 1, #(obj.listras) do
+			obj.listras[i]:draw()
+		end
+	end,
+}
 
-			pista.stripes.update()
-			pista.obstaculos.update(pontos, cars)
-		end,
-		
-		draw = function(pista)
-			pista.stripes.draw()
-			pista.obstaculos.draw()
-		end,
+local mt = {
+	__index = pista,
+}
+
+function pista.cria(posX, height, width)
+	pist = {
+		x = posX,
+		height = height,
+		width = width,
+		listras = {
+			listras.cria(posX, height),
+			listras.cria(posX + width, height)
+		}
 	}
-	  
-	return pista
+	
+	setmetatable(pist, mt)
+	return pist
 end
 
-
-return PISTA_MODULE
+return pista

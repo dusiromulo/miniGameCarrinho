@@ -1,70 +1,56 @@
-CARRO_MODULE = require 'src/view/carro'
-PISTA_MODULE = require 'src/view/pista'
-NOVO_JOGADOR_MODULE = require 'src/controller/novo_jogador'
+pista = require 'src/view/pista'
+novo_jogador = require 'src/controller/novo_jogador'
 
 local w, h = 1280,720
 local total_nodes = 3
-local novo_jogador = nil
-cars = {}
-pista = {}
-pontos = {0,0,0}
+local novoJogadorObj = nil
+local pistas = {}
 
-local function loadPista()
-	pista = PISTA_MODULE.newPista()
-end
-
-local function loadCarros()
-	for i = 1, total_nodes do
-		if (i == 1) then
-		  cars[#cars+1] = CARRO_MODULE.cria(w*0.165, w*0.11, h*0.8, "images/car1.png")
-		elseif (i == 2) then
-		  cars[#cars+1] = CARRO_MODULE.cria(w*0.165 + 0.33*w, w*0.11, h*0.8, "images/car2.png")
-		else
-		  cars[#cars+1] = CARRO_MODULE.cria(w*0.165 + 0.66*w, w*0.11, h*0.8, "images/car3.png")
-		end
-	end  
-end
 
 function novoPlayer(nome, posicao)
 	print("newConnection " .. nome .. " " .. posicao)
+	local paddingPistas = 20
+	local lenPistas = #pistas
+	local pistaX, pistaW = (posicao-1)*w*0.33 + paddingPistas/2, w*0.33 - paddingPistas
+	local carCenter, carMoveX = pistaX + w*0.165 - paddingPistas/2, pistaW/3
+	if lenPistas == 0 then
+		carImg = "images/car1.png"
+	elseif lenPistas == 1 then
+		carImg = "images/car2.png"
+	else
+		carImg = "images/car3.png"
+	end
+
+	pistas[lenPistas+1] = pista.cria(pistaX, h, pistaW)
+	pistas[lenPistas+1]:criaCarro(carCenter, carMoveX, carImg)
 end
 
 function appState()
-	return true
+	return #pistas < total_nodes
 end
 
 function love.load()
+	love.window.setTitle("Mini Game - Carros")
 	love.window.setMode(w, h)
 	love.graphics.setBackgroundColor(255, 255, 255)
-	w, h = love.graphics.getDimensions()
-	loadPista()
-	loadCarros()
 
-	novo_jogador = NOVO_JOGADOR_MODULE.cria(novoPlayer, appState)
+	novoJogadorObj = novo_jogador.cria(novoPlayer, appState)
+	novoPlayer("breno", 1)
+	novoPlayer("magro", 2)
 end
 
-function love.update()
-	pista:update(pontos, cars)
-	novo_jogador:update()
-	--[[for i = 1, #cars do
-		cars[i]:update()
-	end]]
+function love.update(dt)
+	for i = 1, #pistas do
+		pistas[i]:update(dt)
+	end
+	novoJogadorObj:update()
 end
 
 
 function love.draw()
-	love.graphics.setColor(0,0,0)
-	pontosP1 = "P1 = " .. pontos[1]
-	pontosP2 = "P2 = " .. pontos[2]
-	pontosP3 = "P3 = " .. pontos[3]
-	love.graphics.print(pontosP1, w*0.165, h*0.1)
-	love.graphics.print(pontosP2, w*0.165 + w*0.33, h*0.1)
-	love.graphics.print(pontosP3, w*0.165 + w*0.66, h*0.1)
 	love.graphics.setColor(255, 255, 255)
-	pista:draw()
-
-	for i,v in pairs(cars) do
-		cars[i]:draw()
+	
+	for i = 1, #pistas do
+		pistas[i]:draw()
 	end
 end
-  
