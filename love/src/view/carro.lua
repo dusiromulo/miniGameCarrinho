@@ -17,20 +17,23 @@ local carro = {
 		love.graphics.setColor(255, 255, 255)
 		love.graphics.draw(obj.imagem, obj.x, obj.y)
 	end,
-	moveEsq = function(obj)
+	moveEsq = function (obj)
 		if (obj.lane > 1) then
 			obj.lane = obj.lane - 1
 		end
 		obj.x = obj.carPositions[obj.lane]
 	end,
-	moveDir = function(obj)
+	moveDir = function (obj)
 		if (obj.lane < 3) then
 			obj.lane = obj.lane + 1
 		end
 		obj.x = obj.carPositions[obj.lane]
 	end,
-	both = function(obj)
+	both = function (obj)
 	end,
+	getLane = function (obj)
+		return obj.lane
+	end
 }
 
 local mt = {
@@ -58,7 +61,7 @@ function carro.cria(id, channel, startX, moveOffsetX, fixedY, imagem)
 	setmetatable(carro, mt)
 
 	local callbacks = createCallbackTable(carro)
-	--carro.controle = controle.cria(id, channel, callbacks[1], callbacks[2], callbacks[3])
+	carro.controle = controle.cria(id, channel, callbacks[1], callbacks[2], callbacks[3])
 	return carro
 end
 

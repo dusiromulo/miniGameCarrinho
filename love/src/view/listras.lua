@@ -6,6 +6,9 @@ listras = {
 	currOffset = 0,
 	width = 10,
 	height = 30,
+	levelUp = function (obj)
+		obj.velocidade = obj.velocidade + 1
+	end,
 	update = function (obj, dt)
 		obj.currOffset = obj.currOffset + dt*obj.velocidade*obj.velPx
 		if obj.currOffset > 2*obj.height then

@@ -16,11 +16,23 @@ pista = {
 		obj.started = true
 		obj.obstaculos:start()
 	end,
+	stop = function (obj)
+		obj.started = false
+		obj.obstaculos:stop()
+	end,
+	levelUp = function (obj)
+		obj.velocidade = obj.velocidade + 1
+		obj.obstaculos:levelUp()
+		for i = 1, #(obj.listras) do
+			obj.listras[i]:levelUp()
+		end
+	end,
 	setListaObstaculos = function (obj, obstaculos)
 		obj.obstaculos:setObstaculos(obstaculos)
 	end,
 	criaObstaculos = function (obj, midX, offsetX, positionX, velPx)
-		obj.obstaculos = obstaculos.cria(obj.height, midX, offsetX, positionX, velPx)
+		obj.obstaculos = obstaculos.cria(obj.height, midX, offsetX, positionX, velPx,
+			function() obj:stop() end, function() return obj.carro:getLane() end)
 	end,
 	criaCarro = function (obj, id, channel, carPosition, carMoveOffsetX, carImg)
 		obj.carro = carro.cria(id, channel, carPosition, carMoveOffsetX, obj.height*0.8, carImg)
@@ -39,8 +51,10 @@ pista = {
 			obj.listras[i]:draw()
 		end
 
-		if obj.obstaculos ~= nil then
-			obj.obstaculos:draw()
+		if obj.started then
+			if obj.obstaculos ~= nil then
+				obj.obstaculos:draw()
+			end
 		end
 
 		if obj.carro ~= nil then

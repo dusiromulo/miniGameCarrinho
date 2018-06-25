@@ -8,13 +8,19 @@ obstaculos = {
 	started = false,
 	offset = 0,
 	showingFinal = false,
-	totalObstaculos = 9,
+	totalObstaculos = 20,
 	offsetObstaculos = 300,
 	setObstaculos = function (obj, obstaculos)
 		obj.obstaculos = obstaculos
 	end,
 	start = function(obj)
 		obj.started = true
+	end,
+	stop = function (obj)
+		obj.started = false
+	end,
+	levelUp = function (obj)
+		obj.velocidade = obj.velocidade + 1
 	end,
 	update = function(obj, dt)
 		if obj.started then
@@ -32,6 +38,12 @@ obstaculos = {
 				love.graphics.setColor(255, 255, 255)
 				love.graphics.draw(obj.img, obj.positionX + obj.positions[obj.obstaculos[i].x], 
 					currY)
+
+				if currY > obj.windowHeight*0.8 then
+					if obj.callbackCarroLane() == obj.obstaculos[i].x then
+						obj.callbackCrash()
+					end
+				end
 
 				if i == #(obj.obstaculos) then
 					if not obj.showingFinal then
@@ -64,12 +76,14 @@ function obstaculos.criaLista()
 	return positions
 end
 
-function obstaculos.cria(windowHeight, midX, offsetX, positionX, velPx)
+function obstaculos.cria(windowHeight, midX, offsetX, positionX, velPx, callbackCrash, callbackCarroLane)
 	local obstacleImg = love.graphics.newImage("images/obstacle.png")
 	local obstacleWidth = obstacleImg:getWidth()
 
 	obstaculos = {
 		windowHeight = windowHeight,
+		callbackCrash = callbackCrash,
+		callbackCarroLane = callbackCarroLane,
 		velPx = velPx,
 		positionX = positionX,
 		positions = {midX - offsetX - obstacleWidth/2, midX - obstacleWidth/2, midX + offsetX - obstacleWidth/2},

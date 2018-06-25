@@ -39,6 +39,7 @@ function novoPlayer(nome, posicao)
 
 	pistas[lenPistas+1]:setListaObstaculos(listaObstaculos)
 	pistas[lenPistas+1]:start()
+	startedTime = os.time()
 
 	if #pistas == total_nodes then
 		startedTime = os.time()
@@ -60,23 +61,28 @@ end
 
 function love.load()
 	love.window.setTitle("Mini Game - Carros")
-	love.window.setMode(w, h)
+	love.window.setMode(w, h, {msaa=8})
 	love.graphics.setBackgroundColor(255, 255, 255)
 
-	--novoJogadorObj = novo_jogador.cria(novoPlayer, podeConectar)
+	novoJogadorObj = novo_jogador.cria(novoPlayer, podeConectar)
 	novoPlayer("a", 1)
 	novoPlayer("a", 2)
 end
 
 function love.update(dt)
 	if appState == states.PLAYING then
-		local vel = ((os.time() - startedTime)/secondsStageUp)+1
+		if (os.time() - startedTime) > secondsStageUp then
+			startedTime = os.time()
+			for i = 1, #pistas do
+				pistas[i]:levelUp()
+			end
+		end
 	end
 
 	for i = 1, #pistas do
 		pistas[i]:update(dt)
 	end
-	--novoJogadorObj:update()
+	novoJogadorObj:update()
 
 end
 
