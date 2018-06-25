@@ -14,6 +14,7 @@ local playTopicName = "new_player" .. playerPosTopic
 local isPlaying = false
 
 local maxTimeTriggerTiro = 200000 -- 200 ms!
+local buttonBounceLimit = 100000 -- 100 ms!
 local lastBtn1Press, lastBtn2Press = 0, 0
 
 gpio.mode(sw1, gpio.INPUT, gpio.PULLUP)
@@ -25,30 +26,34 @@ gpio.mode(led2, gpio.OUTPUT)
 local function moveLeft(_, time)
     print("pressionou chave 1")
     
-    if isPlaying then
-        if time - lastBtn2Press < maxTimeTriggerTiro then
-            msgr.sendMessage("ambos", playTopicName)
-        else 
-            msgr.sendMessage("esq", playTopicName)
+    if time - lastBtn2Press > buttonBounceLimit then
+        if isPlaying then
+            if time - lastBtn2Press < maxTimeTriggerTiro then
+                msgr.sendMessage("ambos", playTopicName)
+            else 
+                msgr.sendMessage("esq", playTopicName)
+            end
+        else
+            msgr.sendMessage(playerName..playerRand, playTopicName)
         end
-        lastBtn1Press = time
-    else
-        msgr.sendMessage(playerName..playerRand, playTopicName)
     end
+    lastBtn1Press = time
 end
 
 local function moveRight(_, time)
     print("pressionou chave 2")
-    if isPlaying then
-        if time - lastBtn1Press < maxTimeTriggerTiro then
-            msgr.sendMessage("ambos", playTopicName)
-        else 
-            msgr.sendMessage("dir", playTopicName)
+    if time - lastBtn2Press > buttonBounceLimit then
+        if isPlaying then
+            if time - lastBtn1Press < maxTimeTriggerTiro then
+                msgr.sendMessage("ambos", playTopicName)
+            else 
+                msgr.sendMessage("dir", playTopicName)
+            end
+        else
+            msgr.sendMessage(playerName..playerRand, playTopicName)
         end
-        lastBtn2Press = time
-    else
-        msgr.sendMessage(playerName..playerRand, playTopicName)
     end
+    lastBtn2Press = time
 end
 
 local function mensagemRecebida (mensagem)

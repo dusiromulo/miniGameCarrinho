@@ -39,8 +39,8 @@ local mt = {
 
 local function createCallbackTable(carro)
 	return {
-		function() print("esquerda") carro:moveEsq() end, 
-		function() print("dir") carro:moveDir() end, 
+		function() carro:moveEsq() end, 
+		function() carro:moveDir() end, 
 		function() carro:both() end
 	}
 end

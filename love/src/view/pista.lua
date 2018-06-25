@@ -4,6 +4,7 @@ carro = require 'src/view/carro'
 pista = {
 	velocidade = 1,
 	x = 0,
+	playerName = "",
 	height = 0,
 	width = 0,
 	listras = {},
@@ -17,6 +18,7 @@ pista = {
 		end
 	end,
 	draw = function (obj)
+		
 		for i = 1, #(obj.listras) do
 			obj.listras[i]:draw()
 		end
@@ -31,11 +33,12 @@ local mt = {
 	__index = pista,
 }
 
-function pista.cria(posX, height, width)
+function pista.cria(posX, height, width, nome)
 	pist = {
 		x = posX,
 		height = height,
 		width = width,
+		playerName = nome,
 		listras = {
 			listras.cria(posX, height),
 			listras.cria(posX + width/2, height, 5, 60),

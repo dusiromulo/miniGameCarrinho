@@ -8,7 +8,6 @@ local pistas = {}
 
 
 function novoPlayer(nome, posicao)
-	--print("newConnection " .. nome .. " " .. posicao)
 	local paddingPistas = 20
 	local lenPistas = #pistas
 	local pistaX, pistaW = (posicao-1)*w*0.33 + paddingPistas/2, w*0.33 - paddingPistas
@@ -37,6 +36,7 @@ function love.load()
 	love.graphics.setBackgroundColor(255, 255, 255)
 
 	novoJogadorObj = novo_jogador.cria(novoPlayer, appState)
+	novoPlayer("breno", 1)
 end
 
 function love.update(dt)

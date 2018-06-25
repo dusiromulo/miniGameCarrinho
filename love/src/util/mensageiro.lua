@@ -1,9 +1,20 @@
 local msgr = require "src/util/mqttLoveLibrary"
 
 local mensageiro = {}
+local callbacks = {}
 
-function mensageiro.cria(id, topic, callbackMsg)
+function callbackMsg(topic, msg)
+	if callbacks[topic] ~= nil then
+		callbacks[topic](msg)
+	end
+end
+
+function mensageiro.cria(id, topic)
 	msgr.start(id, topic, callbackMsg)
+end
+
+function mensageiro.addCallback(topic, callbackMsg)
+	callbacks[topic] = callbackMsg
 end
 
 function mensageiro.check()

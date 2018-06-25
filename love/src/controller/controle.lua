@@ -29,9 +29,9 @@ function controle.cria(id, playerChannel, callback_esq, callback_dir, callback_b
 	control.callback_esq = callback_esq
 	control.callback_dir = callback_dir
 	control.callback_both = callback_both
-	print(playerChannel)
-	mensageiro.cria(id, playerChannel, function(msg) control:mensagemRecebida(msg) end)
-
+	
+	mensageiro.sub(playerChannel)
+	mensageiro.addCallback(playerChannel, function(msg) control:mensagemRecebida(msg) end)
 	return control
 end
 
