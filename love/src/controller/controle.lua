@@ -5,6 +5,7 @@ local controle = {
 	callback_dir = nil,
 	callback_both = nil,
 	mensagemRecebida = function (obj, msg)
+		print(msg)
 		if (msg == "esq") then
 			obj.callback_esq()
 		elseif (msg == "dir") then
@@ -12,6 +13,9 @@ local controle = {
 		elseif (msg == "ambos") then
 			obj.callback_both()
 		end
+	end,
+	update = function(obj)
+		mensageiro.check()
 	end
 }
 
@@ -25,7 +29,8 @@ function controle.cria(id, playerChannel, callback_esq, callback_dir, callback_b
 	control.callback_esq = callback_esq
 	control.callback_dir = callback_dir
 	control.callback_both = callback_both
-	mensageiro.cria(id, playerChannel, control:mensagemRecebida)
+	print(playerChannel)
+	mensageiro.cria(id, playerChannel, function(msg) control:mensagemRecebida(msg) end)
 
 	return control
 end

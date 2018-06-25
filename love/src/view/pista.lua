@@ -8,8 +8,8 @@ pista = {
 	width = 0,
 	listras = {},
 	carro = nil,
-	criaCarro = function (obj, carPosition, carMoveOffsetX, carImg)
-		obj.carro = carro.cria(carPosition, carMoveOffsetX, obj.height*0.8, carImg)
+	criaCarro = function (obj, id, channel, carPosition, carMoveOffsetX, carImg)
+		obj.carro = carro.cria(id, channel, carPosition, carMoveOffsetX, obj.height*0.8, carImg)
 	end,
 	update = function (obj, dt)
 		for i = 1, #(obj.listras) do
@@ -17,12 +17,12 @@ pista = {
 		end
 	end,
 	draw = function (obj)
-		if obj.carro ~= nil then
-			obj.carro:draw()
-		end
-
 		for i = 1, #(obj.listras) do
 			obj.listras[i]:draw()
+		end
+
+		if obj.carro ~= nil then
+			obj.carro:draw()
 		end
 	end,
 }
@@ -38,6 +38,7 @@ function pista.cria(posX, height, width)
 		width = width,
 		listras = {
 			listras.cria(posX, height),
+			listras.cria(posX + width/2, height, 5, 60),
 			listras.cria(posX + width, height)
 		}
 	}

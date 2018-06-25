@@ -8,7 +8,7 @@ local pistas = {}
 
 
 function novoPlayer(nome, posicao)
-	print("newConnection " .. nome .. " " .. posicao)
+	--print("newConnection " .. nome .. " " .. posicao)
 	local paddingPistas = 20
 	local lenPistas = #pistas
 	local pistaX, pistaW = (posicao-1)*w*0.33 + paddingPistas/2, w*0.33 - paddingPistas
@@ -22,7 +22,9 @@ function novoPlayer(nome, posicao)
 	end
 
 	pistas[lenPistas+1] = pista.cria(pistaX, h, pistaW)
-	pistas[lenPistas+1]:criaCarro(carCenter, carMoveX, carImg)
+	local id = nome..posicao
+	local channel = id.."_mini_game_love"
+	pistas[lenPistas+1]:criaCarro(id, channel, carCenter, carMoveX, carImg)
 end
 
 function appState()
@@ -35,8 +37,6 @@ function love.load()
 	love.graphics.setBackgroundColor(255, 255, 255)
 
 	novoJogadorObj = novo_jogador.cria(novoPlayer, appState)
-	novoPlayer("breno", 1)
-	novoPlayer("magro", 2)
 end
 
 function love.update(dt)

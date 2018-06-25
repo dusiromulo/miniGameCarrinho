@@ -52,12 +52,15 @@ local function moveRight(_, time)
 end
 
 local function mensagemRecebida (mensagem)
-    print("Mensagem recebida: " .. mensagem)
-    if (string.match(mensagem, playerName..playerRand)) then
-        isPlaying = true
-        pos = string.find(mensagem, ",")
-        playerNumber = tonumber(string.sub(mensagem, pos+1))
-        msgr.subToNewTopic(playerName .. playerNumber .. playerPosTopic)
+    if not isPlaying then
+        print("Mensagem recebida: " .. mensagem)
+        if (string.match(mensagem, playerName.."-"..playerRand)) then
+            isPlaying = true
+            pos = string.find(mensagem, ",")
+            playerNumber = tonumber(string.sub(mensagem, pos+1))
+            playTopicName = playerName .. playerNumber .. playerPosTopic
+            msgr.subToNewTopic(playTopicName)
+        end
     end
 end
 
