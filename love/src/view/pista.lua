@@ -32,7 +32,7 @@ pista = {
 	end,
 	criaObstaculos = function (obj, midX, offsetX, positionX, velPx)
 		obj.obstaculos = obstaculos.cria(obj.height, midX, offsetX, positionX, velPx,
-			function() obj:stop() end, function() return obj.carro:getLane() end)
+			function() obj:stop() end, function() return obj.carro:getLane(), obj.carro:getHeight() end)
 	end,
 	criaCarro = function (obj, id, channel, carPosition, carMoveOffsetX, carImg)
 		obj.carro = carro.cria(id, channel, carPosition, carMoveOffsetX, obj.height*0.8, carImg)

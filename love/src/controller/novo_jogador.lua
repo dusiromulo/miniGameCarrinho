@@ -4,14 +4,18 @@ local novo_jogador = {
 	fromTopic = "new_player_mini_game_love",
 	toTopic = "new_player_mini_game_node",
 	totalPlayers = 0,
+  players = {},
 	callback_nova_conexao = nil,
 	callback_pronto_para_nova_conexao = nil,
 	mensagemRecebida = function (obj, msg)
 		if obj.callback_pronto_para_nova_conexao() and obj.totalPlayers < 3 then
-			obj.totalPlayers = obj.totalPlayers + 1
-			mensageiro.send(msg .. "," .. obj.totalPlayers, obj.toTopic)
 			nome = string.match(msg, "%D+")
-			obj.callback_nova_conexao(nome, obj.totalPlayers)
+      if obj.players[nome] == nil then
+        obj.totalPlayers = obj.totalPlayers + 1
+        mensageiro.send(msg .. "," .. obj.totalPlayers, obj.toTopic)
+        obj.callback_nova_conexao(nome, obj.totalPlayers)
+        obj.players[nome] = 1
+      end
 		end
 	end,
 	update = function(obj)

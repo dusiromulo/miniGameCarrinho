@@ -33,7 +33,10 @@ local carro = {
 	end,
 	getLane = function (obj)
 		return obj.lane
-	end
+	end,
+  getHeight = function (obj)
+		return obj.imagem:getHeight()
+	end,
 }
 
 local mt = {

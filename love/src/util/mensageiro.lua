@@ -4,6 +4,8 @@ local mensageiro = {}
 local callbacks = {}
 
 function callbackMsg(topic, msg)
+  print("topic = ",topic)
+  print("msg = ",msg)
 	if callbacks[topic] ~= nil then
 		callbacks[topic](msg)
 	end

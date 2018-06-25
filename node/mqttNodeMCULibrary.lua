@@ -45,6 +45,7 @@ function mqttConnect()
   end
 
   print('Attempt to connect')
+  print("HOST = ",HOST,"  PORT = ", PORT)
   mqttClient:connect(HOST,PORT,0,0, mqttConnected, mqttcouldnotconnect)
 end
 
