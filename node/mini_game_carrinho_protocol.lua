@@ -5,7 +5,7 @@ local led2 = 6
 local sw1 = 1
 local sw2 = 2
 
-local playerName = "Breno420"
+local playerName = "Romulo"
 local playerRand = math.floor(math.random(1, 99999))
 local playerNumber = ""
 
@@ -14,7 +14,7 @@ local playTopicName = "new_player" .. playerPosTopic
 local isPlaying = false
 
 local maxTimeTriggerTiro = 200000 -- 200 ms!
-local buttonBounceLimit = 300000 -- 100 ms!
+local buttonBounceLimit = 300000 -- 300 ms!
 local lastBtn1Press, lastBtn2Press = 0, 0
 
 gpio.mode(sw1, gpio.INPUT, gpio.PULLUP)
@@ -57,10 +57,10 @@ local function moveRight(_, time)
     gpio.trig(sw2, "down", moveRight)
 end
 
-local function mensagemRecebida (mensagem)
+local function mensagemRecebida(mensagem)
     if not isPlaying then
         print("Mensagem recebida: " .. mensagem)
-        if (string.match(mensagem, playerName.."-"..playerRand)) then
+        if (string.match(mensagem, playerName..playerRand)) then
             isPlaying = true
             pos = string.find(mensagem, ",")
             playerNumber = tonumber(string.sub(mensagem, pos+1))

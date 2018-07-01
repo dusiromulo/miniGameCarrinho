@@ -38,8 +38,6 @@ function novoPlayer(nome, posicao)
 	end
 
 	pistas[lenPistas+1]:setListaObstaculos(listaObstaculos)
-	--pistas[lenPistas+1]:start()
-	--startedTime = os.time()
 
 	if #pistas == total_nodes then
 		startedTime = os.time()
@@ -65,8 +63,14 @@ function love.load()
 	love.graphics.setBackgroundColor(255, 255, 255)
 
 	novoJogadorObj = novo_jogador.cria(novoPlayer, podeConectar)
-	--novoPlayer("a", 1)
-	--novoPlayer("a", 2)
+	novoJogadorObj:mensagemRecebida("a132")
+	--novoPlayer("b", 2)
+end
+
+function love.keypressed(key, scancode, isrepeat)
+	if key == "space" then
+		novoJogadorObj:mensagemRecebida("b123")
+	end
 end
 
 function love.update(dt)
@@ -85,7 +89,6 @@ function love.update(dt)
 	novoJogadorObj:update()
 
 end
-
 
 function love.draw()
 	love.graphics.setColor(255, 255, 255)

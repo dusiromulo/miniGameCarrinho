@@ -34,7 +34,7 @@ local carro = {
 	getLane = function (obj)
 		return obj.lane
 	end,
-  getHeight = function (obj)
+	getHeight = function (obj)
 		return obj.imagem:getHeight()
 	end,
 }
@@ -54,18 +54,18 @@ end
 function carro.cria(id, channel, startX, moveOffsetX, fixedY, imagem)
 	local carImg = love.graphics.newImage(imagem)
 	local carWidth = carImg:getWidth()
-	carro = {
+	car = {
 		x = startX - carWidth/2,
 		y = fixedY,
 		carPositions = {startX - moveOffsetX - carWidth/2, startX - carWidth/2, startX + moveOffsetX - carWidth/2},
 		imagem = carImg
 	}
 
-	setmetatable(carro, mt)
+	setmetatable(car, mt)
 
-	local callbacks = createCallbackTable(carro)
-	carro.controle = controle.cria(id, channel, callbacks[1], callbacks[2], callbacks[3])
-	return carro
+	local callbacks = createCallbackTable(car)
+	car.controle = controle.cria(id, channel, callbacks[1], callbacks[2], callbacks[3])
+	return car
 end
 
 return carro

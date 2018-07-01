@@ -1,15 +1,15 @@
 local mensageiro = require "src/util/mensageiro"
 
 local controle = {
+	id = nil,
 	callback_esq = nil,
 	callback_dir = nil,
 	callback_both = nil,
 	mensagemRecebida = function (obj, msg)
-		print(msg)
 		if (msg == "esq") then
-			obj.callback_esq()
+			obj:callback_esq()
 		elseif (msg == "dir") then
-			obj.callback_dir()
+			obj:callback_dir()
 		elseif (msg == "ambos") then
 			obj.callback_both()
 		end
@@ -24,11 +24,13 @@ local mt = {
 }
 
 function controle.cria(id, playerChannel, callback_esq, callback_dir, callback_both)
-	control = {}
+	local control = {
+		id = id,
+		callback_esq = callback_esq,
+		callback_dir = callback_dir,
+		callback_both = callback_both
+	}
 	setmetatable(control, mt)
-	control.callback_esq = callback_esq
-	control.callback_dir = callback_dir
-	control.callback_both = callback_both
 	
 	mensageiro.sub(playerChannel)
 	mensageiro.addCallback(playerChannel, function(msg) control:mensagemRecebida(msg) end)

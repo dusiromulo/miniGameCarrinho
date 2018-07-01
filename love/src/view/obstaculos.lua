@@ -6,6 +6,7 @@ obstaculos = {
 	posicoes = {},
 	positionX = 0,
 	started = false,
+	crashed = false,
 	offset = 0,
 	showingFinal = false,
 	totalObstaculos = 20,
@@ -38,7 +39,8 @@ obstaculos = {
 				love.graphics.setColor(255, 255, 255)
 				love.graphics.draw(obj.img, obj.positionX + obj.positions[obj.obstaculos[i].x], 
 					currY)
-        carLane, carHeight = obj.callbackCarroLane()
+				
+				carLane, carHeight = obj.callbackCarroLane()
 				if currY > obj.windowHeight*0.8 and currY < obj.windowHeight*0.8 + carHeight then
 					if carLane == obj.obstaculos[i].x then
 						obj.callbackCrash()

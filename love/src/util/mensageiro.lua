@@ -4,8 +4,6 @@ local mensageiro = {}
 local callbacks = {}
 
 function callbackMsg(topic, msg)
-  print("topic = ",topic)
-  print("msg = ",msg)
 	if callbacks[topic] ~= nil then
 		callbacks[topic](msg)
 	end
@@ -15,8 +13,8 @@ function mensageiro.cria(id, topic)
 	msgr.start(id, topic, callbackMsg)
 end
 
-function mensageiro.addCallback(topic, callbackMsg)
-	callbacks[topic] = callbackMsg
+function mensageiro.addCallback(topic, callback)
+	callbacks[topic] = callback
 end
 
 function mensageiro.check()
