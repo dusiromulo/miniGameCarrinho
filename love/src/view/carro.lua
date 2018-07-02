@@ -3,11 +3,17 @@ controle = require 'src/controller/controle'
 local carro = {
 	x = 0,
 	y = 0,
+	callbackRestart = nil,
 	height = 89,
 	lane = 2,
 	carPositions = {0, 0, 0},
+	crashed = false,
 	imagem = nil,
 	controle = nil,
+	start = function (obj)
+		obj.crashed = false
+		obj.lane = 2
+	end,
 	update = function (obj, dt)
 		if obj.controle ~= nil then
 			obj.controle:update()
@@ -18,18 +24,28 @@ local carro = {
 		love.graphics.draw(obj.imagem, obj.x, obj.y)
 	end,
 	moveEsq = function (obj)
-		if (obj.lane > 1) then
-			obj.lane = obj.lane - 1
+		if not obj.crashed then
+			if (obj.lane > 1) then
+				obj.lane = obj.lane - 1
+			end
+			obj.x = obj.carPositions[obj.lane]
 		end
-		obj.x = obj.carPositions[obj.lane]
 	end,
 	moveDir = function (obj)
-		if (obj.lane < 3) then
-			obj.lane = obj.lane + 1
+		if not obj.crashed then
+			if (obj.lane < 3) then
+				obj.lane = obj.lane + 1
+			end
+			obj.x = obj.carPositions[obj.lane]
 		end
-		obj.x = obj.carPositions[obj.lane]
 	end,
 	both = function (obj)
+		if obj.crashed then
+			obj.callbackRestart()
+		end
+	end,
+	crash = function (obj)
+		obj.crashed = true
 	end,
 	getLane = function (obj)
 		return obj.lane
@@ -51,10 +67,11 @@ local function createCallbackTable(carro)
 	}
 end
 
-function carro.cria(id, channel, startX, moveOffsetX, fixedY, imagem)
+function carro.cria(id, channel, startX, moveOffsetX, fixedY, imagem, callbackRestart)
 	local carImg = love.graphics.newImage(imagem)
 	local carWidth = carImg:getWidth()
 	car = {
+		callbackRestart = callbackRestart,
 		x = startX - carWidth/2,
 		y = fixedY,
 		carPositions = {startX - moveOffsetX - carWidth/2, startX - carWidth/2, startX + moveOffsetX - carWidth/2},

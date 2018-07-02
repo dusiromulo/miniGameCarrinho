@@ -1,7 +1,7 @@
 local msgr = require "mqttNodeMCULibrary"
 
-local led1 = 3
-local led2 = 6
+local ledVermelho = 3
+local ledVerde = 6
 local sw1 = 1
 local sw2 = 2
 
@@ -19,8 +19,8 @@ local lastBtn1Press, lastBtn2Press = 0, 0
 
 gpio.mode(sw1, gpio.INPUT, gpio.PULLUP)
 gpio.mode(sw2, gpio.INPUT, gpio.PULLUP)
-gpio.mode(led1, gpio.OUTPUT)
-gpio.mode(led2, gpio.OUTPUT)
+gpio.mode(ledVermelho, gpio.OUTPUT)
+gpio.mode(ledVerde, gpio.OUTPUT)
 
 
 local function moveLeft(_, time)
@@ -57,6 +57,17 @@ local function moveRight(_, time)
     gpio.trig(sw2, "down", moveRight)
 end
 
+local function ligaLeds(numero)
+    if numero == 1 then
+        gpio.write(ledVerde, gpio.HIGH)
+    elseif numero == 2 then
+        gpio.write(ledVermelho, gpio.HIGH)
+    else
+        gpio.write(ledVermelho, gpio.HIGH)
+        gpio.write(ledVerde, gpio.HIGH)
+    end
+end
+
 local function mensagemRecebida(mensagem)
     if not isPlaying then
         print("Mensagem recebida: " .. mensagem)
@@ -64,12 +75,15 @@ local function mensagemRecebida(mensagem)
             isPlaying = true
             pos = string.find(mensagem, ",")
             playerNumber = tonumber(string.sub(mensagem, pos+1))
+            ligaLeds(playerNumber)
             playTopicName = playerName .. playerNumber .. playerPosTopic
             msgr.subToNewTopic(playTopicName)
         end
     end
 end
 
+gpio.write(ledVermelho, gpio.LOW)
+gpio.write(ledVerde, gpio.LOW)
 gpio.trig(sw1, "down", moveLeft)
 gpio.trig(sw2, "down", moveRight)
 msgr.start(playerName, "new_player_mini_game_node", mensagemRecebida)

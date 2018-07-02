@@ -10,6 +10,7 @@ local listaObstaculos = {}
 local startedTime = 0
 local initialVelocity = 100
 local secondsStageUp = 20
+local totalNodesRestarted = 0
 local appState = 0
 local states = {CONNECTING=0, PLAYING=1, FINISHED=2}
 
@@ -27,7 +28,7 @@ function novoPlayer(nome, posicao)
 		carImg = "images/car3.png"
 	end
 
-	pistas[lenPistas+1] = pista.cria(pistaX, h, pistaW, nome, initialVelocity)
+	pistas[lenPistas+1] = pista.cria(pistaX, h, pistaW, nome, initialVelocity, restartGame)
 	local id = nome..posicao
 	local channel = id.."_mini_game_love"
 	pistas[lenPistas+1]:criaCarro(id, channel, carCenter, carMoveX, carImg)
@@ -49,6 +50,24 @@ function novoPlayer(nome, posicao)
 	end
 end
 
+function restartGame()
+	totalNodesRestarted = totalNodesRestarted + 1
+
+	if totalNodesRestarted == 3 then
+		totalNodesRestarted = 0
+
+		listaObstaculos = obstaculos.criaLista()
+
+		for i = 1, #pistas do
+			pistas[i]:setListaObstaculos(listaObstaculos)
+		end
+
+		for i = 1, #pistas do
+			pistas[i]:start()
+		end
+	end	
+end
+
 function podeConectar()
 	if appState == states.CONNECTING then
 		return #pistas < total_nodes
@@ -64,7 +83,6 @@ function love.load()
 
 	novoJogadorObj = novo_jogador.cria(novoPlayer, podeConectar)
 	novoJogadorObj:mensagemRecebida("a132")
-	--novoPlayer("b", 2)
 end
 
 function love.keypressed(key, scancode, isrepeat)

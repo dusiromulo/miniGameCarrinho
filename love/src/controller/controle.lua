@@ -7,9 +7,9 @@ local controle = {
 	callback_both = nil,
 	mensagemRecebida = function (obj, msg)
 		if (msg == "esq") then
-			obj:callback_esq()
+			obj.callback_esq()
 		elseif (msg == "dir") then
-			obj:callback_dir()
+			obj.callback_dir()
 		elseif (msg == "ambos") then
 			obj.callback_both()
 		end

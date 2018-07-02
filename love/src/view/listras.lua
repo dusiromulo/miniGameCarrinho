@@ -6,6 +6,10 @@ listras = {
 	currOffset = 0,
 	width = 10,
 	height = 30,
+	restart = function (obj)
+		obj.velocidade = 1
+		obj.currOffset = 0
+	end,
 	levelUp = function (obj)
 		obj.velocidade = obj.velocidade + 1
 	end,

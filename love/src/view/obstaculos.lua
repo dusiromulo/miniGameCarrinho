@@ -5,6 +5,7 @@ obstaculos = {
 	obstaculos = {},
 	posicoes = {},
 	positionX = 0,
+	obstacleHeight = 0,
 	started = false,
 	crashed = false,
 	offset = 0,
@@ -16,6 +17,8 @@ obstaculos = {
 	end,
 	start = function(obj)
 		obj.started = true
+		obj.velocidade = 1
+		obj.offset = 0
 	end,
 	stop = function (obj)
 		obj.started = false
@@ -24,7 +27,7 @@ obstaculos = {
 		obj.velocidade = obj.velocidade + 1
 	end,
 	update = function(obj, dt)
-		if obj.started then
+		if obj.started and not obj.crashed then
 			obj.offset = obj.offset + dt*obj.velocidade*obj.velPx
 		end
 	end,
@@ -39,13 +42,6 @@ obstaculos = {
 				love.graphics.setColor(255, 255, 255)
 				love.graphics.draw(obj.img, obj.positionX + obj.positions[obj.obstaculos[i].x], 
 					currY)
-				
-				carLane, carHeight = obj.callbackCarroLane()
-				if currY > obj.windowHeight*0.8 and currY < obj.windowHeight*0.8 + carHeight then
-					if carLane == obj.obstaculos[i].x then
-						obj.callbackCrash()
-					end
-				end
 
 				if i == #(obj.obstaculos) then
 					if not obj.showingFinal then
@@ -56,6 +52,16 @@ obstaculos = {
 						if currY > obj.windowHeight then
 							obj.showingFinal = false
 							obj.offset = obj.offset - #(obj.obstaculos)*obstaculos.offsetObstaculos
+						end
+					end
+				end
+				
+				if not obj.crashed then
+					carLane, carHeight = obj.callbackCarroLane()
+					if currY + obj.obstacleHeight > obj.windowHeight*0.8 and currY < obj.windowHeight*0.8 + carHeight then
+						if carLane == obj.obstaculos[i].x then
+							obj.crashed = true
+							obj.callbackCrash()
 						end
 					end
 				end
@@ -80,9 +86,10 @@ end
 
 function obstaculos.cria(windowHeight, midX, offsetX, positionX, velPx, callbackCrash, callbackCarroLane)
 	local obstacleImg = love.graphics.newImage("images/obstacle.png")
-	local obstacleWidth = obstacleImg:getWidth()
+	local obstacleWidth, obstacleHeight = obstacleImg:getWidth(), obstacleImg:getHeight()
 
-	obstaculos = {
+	obstac = {
+		obstacleHeight = obstacleHeight/2,
 		windowHeight = windowHeight,
 		callbackCrash = callbackCrash,
 		callbackCarroLane = callbackCarroLane,
@@ -91,10 +98,9 @@ function obstaculos.cria(windowHeight, midX, offsetX, positionX, velPx, callback
 		positions = {midX - offsetX - obstacleWidth/2, midX - obstacleWidth/2, midX + offsetX - obstacleWidth/2},
 		img = obstacleImg
 	}
-	setmetatable(obstaculos, mt)
+	setmetatable(obstac, mt)
 
-
-	return obstaculos
+	return obstac
 end
 
 return obstaculos
