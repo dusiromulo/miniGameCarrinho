@@ -5,7 +5,7 @@ local ledVerde = 6
 local sw1 = 1
 local sw2 = 2
 
-local playerName = "Player"
+local playerName = "Nicholas"
 local playerRand = math.floor(math.random(1, 99999))
 local playerNumber = ""
 

@@ -8,10 +8,12 @@ local carro = {
 	lane = 2,
 	carPositions = {0, 0, 0},
 	crashed = false,
+  restarted = false,
 	imagem = nil,
 	controle = nil,
 	start = function (obj)
 		obj.crashed = false
+    obj.restarted = false
 		obj.lane = 2
 		obj.x = obj.carPositions[obj.lane]
 	end,
@@ -42,7 +44,10 @@ local carro = {
 	end,
 	both = function (obj)
 		if obj.crashed then
-			obj.callbackRestart()
+      if not obj.restarted then
+        obj.callbackRestart()
+        obj.restarted = true
+      end
 		end
 	end,
 	crash = function (obj)

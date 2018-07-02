@@ -4,8 +4,8 @@ local function wifi_connected_callback(iptable)
 end
 
 wificonf = {
-  ssid = "",
-  pwd = "",
+  ssid = "AndroidAP",
+  pwd = "asdf1234",
   got_ip_cb = wifi_connected_callback,
   save = false,
 }
