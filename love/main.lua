@@ -2,8 +2,9 @@ pista = require 'src/view/pista'
 obstaculos = require 'src/view/obstaculos'
 novo_jogador = require 'src/controller/novo_jogador'
 
-local w, h = 1280,720
-local total_nodes = 3
+local total_nodes = 2
+local each_track_w = 426
+local w, h = each_track_w*total_nodes + total_nodes*20, 720
 local novoJogadorObj = nil
 local pistas = {}
 local listaObstaculos = {}
@@ -18,8 +19,8 @@ local states = {CONNECTING=0, PLAYING=1, FINISHED=2}
 function novoPlayer(nome, posicao)
 	local paddingPistas = 20
 	local lenPistas = #pistas
-	local pistaX, pistaW = (posicao-1)*w*0.33 + paddingPistas/2, w*0.33 - paddingPistas
-	local carCenter, carMoveX = pistaX + w*0.165 - paddingPistas/2, pistaW/3
+	local pistaX, pistaW = (posicao-1)*w/total_nodes + paddingPistas/2, w/total_nodes - paddingPistas
+	local carCenter, carMoveX = pistaX + pistaW/2, pistaW/3
 	if lenPistas == 0 then
 		carImg = "images/car1.png"
 	elseif lenPistas == 1 then
@@ -51,10 +52,13 @@ function novoPlayer(nome, posicao)
 end
 
 function restartGame()
+	appState = states.CONNECTING
 	totalNodesRestarted = totalNodesRestarted + 1
 
-	if totalNodesRestarted == 3 then
+	if totalNodesRestarted == total_nodes then
 		totalNodesRestarted = 0
+		startedTime = os.time()
+		appState = states.PLAYING
 
 		listaObstaculos = obstaculos.criaLista()
 

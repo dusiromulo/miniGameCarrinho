@@ -13,6 +13,7 @@ local carro = {
 	start = function (obj)
 		obj.crashed = false
 		obj.lane = 2
+		obj.x = obj.carPositions[obj.lane]
 	end,
 	update = function (obj, dt)
 		if obj.controle ~= nil then

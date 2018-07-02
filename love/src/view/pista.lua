@@ -27,6 +27,7 @@ pista = {
 		obj.totalRestarted = 0
 		obj.started = true
 		obj.crashed = false
+		obj.carro:start()
 		obj.obstaculos:start()
 	end,
 	stop = function (obj)
@@ -37,7 +38,9 @@ pista = {
 		obj.started = false
 		obj.crashed = false
 		obj.velocidade = 1
-
+		obj.pontos = 0
+		obj.pontosPlayer:set(tostring(obj.pontos))
+		
 		for i = 1, #(obj.listras) do
 			obj.listras[i]:restart()
 		end

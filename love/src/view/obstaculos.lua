@@ -17,6 +17,7 @@ obstaculos = {
 	end,
 	start = function(obj)
 		obj.started = true
+		obj.crashed = false
 		obj.velocidade = 1
 		obj.offset = 0
 	end,
@@ -77,8 +78,7 @@ local mt = {
 function obstaculos.criaLista()
 	math.randomseed(os.time())
 	local positions = {}
-	local totalPositions = obstaculos.totalObstaculos
-	for i = 1, totalPositions do
+	for i = 1, obstaculos.totalObstaculos do
 		positions[i] = {x=math.random(1, 3), y=i*obstaculos.offsetObstaculos*-1}
 	end
 	return positions

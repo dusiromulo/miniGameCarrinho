@@ -21,11 +21,11 @@ listras = {
 	end,
 	draw = function (obj)
 		love.graphics.setColor(0, 0, 0)
-		for i = -2, math.floor(obj.windowHeight/obj.height) do -- para desenhar fora da tela
+		for i = -2, math.floor(obj.windowHeight/obj.height) do
 			if i % 2 == 0 then
 				love.graphics.rectangle("fill", obj.x, obj.currOffset + i*obj.height, obj.width, obj.height)
 			end
-		end		
+		end
 	end,
 }
 
