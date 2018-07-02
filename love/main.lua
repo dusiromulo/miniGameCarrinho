@@ -82,13 +82,6 @@ function love.load()
 	love.graphics.setBackgroundColor(255, 255, 255)
 
 	novoJogadorObj = novo_jogador.cria(novoPlayer, podeConectar)
-	novoJogadorObj:mensagemRecebida("a132")
-end
-
-function love.keypressed(key, scancode, isrepeat)
-	if key == "space" then
-		novoJogadorObj:mensagemRecebida("b123")
-	end
 end
 
 function love.update(dt)
