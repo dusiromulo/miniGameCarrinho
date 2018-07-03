@@ -2,9 +2,10 @@ pista = require 'src/view/pista'
 obstaculos = require 'src/view/obstaculos'
 novo_jogador = require 'src/controller/novo_jogador'
 
-local total_nodes = 1
+local doOnce = true
+local total_nodes = -1
 local each_track_w = 426
-local w, h = each_track_w*total_nodes + total_nodes*20, 720
+local w, h = 640, 720
 local novoJogadorObj = nil
 local pistas = {}
 local listaObstaculos = {}
@@ -84,11 +85,47 @@ function love.load()
 	love.window.setTitle("Mini Game - Carros")
 	love.window.setMode(w, h, {msaa=8})
 	love.graphics.setBackgroundColor(255, 255, 255)
+  
+  input = "Digite 1 para 1 jogador, 2 para 2 e 3 para 3"
+  font = love.graphics.newFont("fonts/arial.ttf")
+  text = love.graphics.newText(font,input)
 
-	novoJogadorObj = novo_jogador.cria(novoPlayer, podeConectar)
+end
+
+function checkNumPlayers()
+  if doOnce == true then
+    if (love.keyboard.isDown("1")) then
+      total_nodes = 1
+      w, h = each_track_w*total_nodes + total_nodes*20, 720
+      love.window.setMode(w, h, {msaa=8})
+      novoJogadorObj = novo_jogador.cria(novoPlayer, podeConectar)
+      doOnce = false
+    end
+    if (love.keyboard.isDown("2")) then
+        print("2")
+      total_nodes = 2
+      w, h = each_track_w*total_nodes + total_nodes*20, 720
+      love.window.setMode(w, h, {msaa=8})
+      novoJogadorObj = novo_jogador.cria(novoPlayer, podeConectar)
+      doOnce = false
+    end
+    if (love.keyboard.isDown("3")) then
+        print("3")
+      total_nodes = 3
+      w, h = each_track_w*total_nodes + total_nodes*20, 720
+      love.window.setMode(w, h, {msaa=8})
+      novoJogadorObj = novo_jogador.cria(novoPlayer, podeConectar)
+      doOnce = false
+    end
+  end
 end
 
 function love.update(dt)
+  checkNumPlayers()
+  if (total_nodes < 0) then
+    return
+  end
+  
 	if appState == states.PLAYING then
 		if (os.time() - startedTime) > secondsStageUp then
 			startedTime = os.time()
@@ -106,8 +143,13 @@ function love.update(dt)
 end
 
 function love.draw()
-	love.graphics.setColor(255, 255, 255)
 	
+  if total_nodes<0 then
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.draw(text,w/2 - text:getWidth()/2 ,h/2)
+  end
+  
+	love.graphics.setColor(255, 255, 255)
 	for i = 1, #pistas do
 		pistas[i]:draw()
 	end
