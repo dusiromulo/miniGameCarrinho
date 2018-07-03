@@ -28,6 +28,7 @@ local carro = {
 		love.graphics.draw(obj.imagem, obj.x, obj.y)
 	end,
 	moveEsq = function (obj)
+		print("moveEsq")
 		if not obj.crashed then
 			if (obj.lane > 1) then
 				obj.lane = obj.lane - 1
@@ -69,21 +70,21 @@ local mt = {
 function carro.cria(id, channel, startX, moveOffsetX, fixedY, imagem, callbackRestart)
 	local carImg = love.graphics.newImage(imagem)
 	local carWidth = carImg:getWidth()
+
+	local callbackEsq = function() car:moveEsq() end
+	local callbackDir = function() car:moveDir() end
+	local callbackBoth = function() car:both() end
+	
 	car = {
 		callbackRestart = callbackRestart,
 		x = startX - carWidth/2,
 		y = fixedY,
 		carPositions = {startX - moveOffsetX - carWidth/2, startX - carWidth/2, startX + moveOffsetX - carWidth/2},
-		imagem = carImg
+		imagem = carImg,
+		controle = controle.cria(id, channel, callbackEsq, callbackDir, callbackBoth)
 	}
 
 	setmetatable(car, mt)
-
-	local callbackEsq = function() car:moveEsq() end
-	local callbackDir = function() car:moveDir() end
-	local callbackBoth = function() car:both() end
-
-	car.controle = controle.cria(id, channel, callbackEsq, callbackDir, callbackBoth)
 	return car
 end
 
