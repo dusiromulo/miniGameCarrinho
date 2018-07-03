@@ -8,12 +8,13 @@ local carro = {
 	lane = 2,
 	carPositions = {0, 0, 0},
 	crashed = false,
-  restarted = false,
+	restarted = false,
 	imagem = nil,
 	controle = nil,
 	start = function (obj)
+		print("carro start")
 		obj.crashed = false
-    obj.restarted = false
+		obj.restarted = false
 		obj.lane = 2
 		obj.x = obj.carPositions[obj.lane]
 	end,
@@ -44,10 +45,10 @@ local carro = {
 	end,
 	both = function (obj)
 		if obj.crashed then
-      if not obj.restarted then
-        obj.callbackRestart()
-        obj.restarted = true
-      end
+			if not obj.restarted then
+				obj.restarted = true
+				obj.callbackRestart()
+			end
 		end
 	end,
 	crash = function (obj)
@@ -65,14 +66,6 @@ local mt = {
 	__index = carro,
 }
 
-local function createCallbackTable(carro)
-	return {
-		function() carro:moveEsq() end, 
-		function() carro:moveDir() end, 
-		function() carro:both() end
-	}
-end
-
 function carro.cria(id, channel, startX, moveOffsetX, fixedY, imagem, callbackRestart)
 	local carImg = love.graphics.newImage(imagem)
 	local carWidth = carImg:getWidth()
@@ -86,8 +79,11 @@ function carro.cria(id, channel, startX, moveOffsetX, fixedY, imagem, callbackRe
 
 	setmetatable(car, mt)
 
-	local callbacks = createCallbackTable(car)
-	car.controle = controle.cria(id, channel, callbacks[1], callbacks[2], callbacks[3])
+	local callbackEsq = function() car:moveEsq() end
+	local callbackDir = function() car:moveDir() end
+	local callbackBoth = function() car:both() end
+
+	car.controle = controle.cria(id, channel, callbackEsq, callbackDir, callbackBoth)
 	return car
 end
 

@@ -2,7 +2,7 @@ pista = require 'src/view/pista'
 obstaculos = require 'src/view/obstaculos'
 novo_jogador = require 'src/controller/novo_jogador'
 
-local total_nodes = 2
+local total_nodes = 1
 local each_track_w = 426
 local w, h = each_track_w*total_nodes + total_nodes*20, 720
 local novoJogadorObj = nil
