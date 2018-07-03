@@ -12,7 +12,6 @@ local carro = {
 	imagem = nil,
 	controle = nil,
 	start = function (obj)
-		print("carro start")
 		obj.crashed = false
 		obj.restarted = false
 		obj.lane = 2
@@ -34,7 +33,6 @@ local carro = {
 		love.graphics.draw(obj.imagem, obj.x, obj.y)
 	end,
 	moveEsq = function (obj)
-		print("moveEsq")
 		if not obj.crashed then
 			if (obj.lane > 1) then
 				obj.lane = obj.lane - 1
