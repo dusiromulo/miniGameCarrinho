@@ -95,6 +95,8 @@ function love.load()
   text = love.graphics.newText(font,input)
   logo = love.graphics.newImage("images/logo.png")
   bg = love.graphics.newImage("images/bg.jpg")
+  bgm = love.audio.newSource("audios/bgm.ogg", "static")
+  bgm:setVolume(0.75)
 
 end
 
@@ -124,6 +126,11 @@ function checkNumPlayers()
       doOnce = false
     end
   end
+  
+  if doOnce == false then
+    love.audio.play(bgm)
+  end
+  
 end
 
 function love.update(dt)
