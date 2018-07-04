@@ -15,6 +15,8 @@ local secondsStageUp = 20
 local totalNodesRestarted = 0
 local appState = 0
 local states = {CONNECTING=0, PLAYING=1, FINISHED=2}
+local display = true
+local cont = 0
 
 
 function novoPlayer(nome, posicao)
@@ -83,12 +85,16 @@ end
 
 function love.load()
 	love.window.setTitle("Mini Game - Carros")
+  w = 1024*0.95
+  h = 640*0.7
 	love.window.setMode(w, h, {msaa=8})
 	love.graphics.setBackgroundColor(255, 255, 255)
   
   input = "Digite 1 para 1 jogador, 2 para 2 e 3 para 3"
   font = love.graphics.newFont("fonts/arial.ttf")
   text = love.graphics.newText(font,input)
+  logo = love.graphics.newImage("images/logo.png")
+  bg = love.graphics.newImage("images/bg.jpg")
 
 end
 
@@ -121,9 +127,17 @@ function checkNumPlayers()
 end
 
 function love.update(dt)
-  checkNumPlayers()
-  if (total_nodes < 0) then
-    return
+  
+  if (doOnce == true) then
+    cont = cont + 1
+    if cont > 40 then
+      cont = 0
+      display = not display
+    end
+    checkNumPlayers()
+    if (total_nodes < 0) then
+      return
+    end
   end
   
 	if appState == states.PLAYING then
@@ -145,8 +159,13 @@ end
 function love.draw()
 	
   if total_nodes<0 then
-    love.graphics.setColor(0, 0, 0)
-    love.graphics.draw(text,w/2 - text:getWidth()/2 ,h/2)
+    love.graphics.setColor(255, 255, 255)
+    love.graphics.draw(bg,0, 0)
+    love.graphics.draw(logo,w/2 - logo:getWidth()/4, h*0.1, 0, 0.5, 0.5)
+    if display == true then
+      love.graphics.setColor(0, 0, 0)
+      love.graphics.draw(text,w/2 - text:getWidth()/2 ,h*0.6)
+    end
   end
   
 	love.graphics.setColor(255, 255, 255)
